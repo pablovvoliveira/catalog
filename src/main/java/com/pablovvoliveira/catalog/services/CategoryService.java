@@ -1,12 +1,12 @@
 package com.pablovvoliveira.catalog.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.pablovvoliveira.catalog.dto.CategoryDTO;
@@ -24,9 +24,9 @@ public class CategoryService {
 	private CategoryRepository repository;
 	
 	@Transactional
-	public List<CategoryDTO> findAll() {
-		List<Category> list = repository.findAll();		
-		return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
+		Page<Category> list = repository.findAll(pageRequest);		
+		return list.map(x -> new CategoryDTO(x));
 	}
 
 	@Transactional
